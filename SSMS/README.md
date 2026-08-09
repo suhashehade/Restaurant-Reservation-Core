@@ -1,7 +1,10 @@
 ## *What did we do?* ##
 
-### *Purpose* ###
-Create ```RestaurantReservationCore``` Database using SSMS vesion 2022.
+Create ```RestaurantReservationCore``` Database using SSMS.
+
+### *SSMS Version* ###
+
+vesion 2022.
 
 ### *SQL Statement* ###
 
