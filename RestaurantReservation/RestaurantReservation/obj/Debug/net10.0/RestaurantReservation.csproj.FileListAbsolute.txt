@@ -1,0 +1,15 @@
+C:\projects\Restaurant-Reservation-Core\RestaurantReservation\RestaurantReservation\bin\Debug\net10.0\RestaurantReservation.exe
+C:\projects\Restaurant-Reservation-Core\RestaurantReservation\RestaurantReservation\bin\Debug\net10.0\RestaurantReservation.deps.json
+C:\projects\Restaurant-Reservation-Core\RestaurantReservation\RestaurantReservation\bin\Debug\net10.0\RestaurantReservation.runtimeconfig.json
+C:\projects\Restaurant-Reservation-Core\RestaurantReservation\RestaurantReservation\bin\Debug\net10.0\RestaurantReservation.dll
+C:\projects\Restaurant-Reservation-Core\RestaurantReservation\RestaurantReservation\bin\Debug\net10.0\RestaurantReservation.pdb
+C:\projects\Restaurant-Reservation-Core\RestaurantReservation\RestaurantReservation\obj\Debug\net10.0\RestaurantReservation.GeneratedMSBuildEditorConfig.editorconfig
+C:\projects\Restaurant-Reservation-Core\RestaurantReservation\RestaurantReservation\obj\Debug\net10.0\RestaurantReservation.AssemblyInfoInputs.cache
+C:\projects\Restaurant-Reservation-Core\RestaurantReservation\RestaurantReservation\obj\Debug\net10.0\RestaurantReservation.AssemblyInfo.cs
+C:\projects\Restaurant-Reservation-Core\RestaurantReservation\RestaurantReservation\obj\Debug\net10.0\RestaurantReservation.csproj.CoreCompileInputs.cache
+C:\projects\Restaurant-Reservation-Core\RestaurantReservation\RestaurantReservation\obj\Debug\net10.0\RestaurantReservation.sourcelink.json
+C:\projects\Restaurant-Reservation-Core\RestaurantReservation\RestaurantReservation\obj\Debug\net10.0\RestaurantReservation.dll
+C:\projects\Restaurant-Reservation-Core\RestaurantReservation\RestaurantReservation\obj\Debug\net10.0\refint\RestaurantReservation.dll
+C:\projects\Restaurant-Reservation-Core\RestaurantReservation\RestaurantReservation\obj\Debug\net10.0\RestaurantReservation.pdb
+C:\projects\Restaurant-Reservation-Core\RestaurantReservation\RestaurantReservation\obj\Debug\net10.0\RestaurantReservation.genruntimeconfig.cache
+C:\projects\Restaurant-Reservation-Core\RestaurantReservation\RestaurantReservation\obj\Debug\net10.0\ref\RestaurantReservation.dll
