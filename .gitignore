@@ -10,3 +10,5 @@
 # SQL Server Management Studio / Temporary files
 *.ssmssln
 *.ssmssqlproj
+
+*.DotSettings.user
