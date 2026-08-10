@@ -1,5 +1,6 @@
 ﻿using RestaurantReservation.Db.Models;
 using Microsoft.EntityFrameworkCore;
+using RestaurantReservation.Db.Seeds;
 
 namespace RestaurantReservation.Db;
 
@@ -98,5 +99,6 @@ public class RestaurantReservationDbContext: DbContext
       .HasForeignKey(t => t.RestaurantId)
       .OnDelete(DeleteBehavior.Cascade);
     
+    modelBuilder.Seed();
   }
 }
