@@ -3,7 +3,7 @@ using RestaurantReservation.Db.Models;
 
 namespace RestaurantReservation.Db.Repositories;
 
-public static class RestaurantsRepository
+public static class RestaurantRepository
 {
     public static async Task<int> Create(Restaurant restaurant)
     {
