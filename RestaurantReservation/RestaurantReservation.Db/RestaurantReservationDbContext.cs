@@ -41,6 +41,13 @@ public class RestaurantReservationDbContext: DbContext
       .WithOne(o => o.Employee)
       .HasForeignKey(o => o.EmployeeId)
       .OnDelete(DeleteBehavior.Restrict);
+
+    modelBuilder.Entity<MenuItem>(entity =>
+    {
+      entity.HasKey(m => m.ItemId);
+      entity.Property(m => m.ItemId)
+        .HasColumnName("MenuItemId");
+    });
     
     modelBuilder.Entity<MenuItem>()
       .HasOne<Restaurant>(m => m.Restaurant)
