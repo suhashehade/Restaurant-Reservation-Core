@@ -1,0 +1,42 @@
+﻿using Microsoft.EntityFrameworkCore;
+using RestaurantReservation.Db.Models;
+
+namespace RestaurantReservation.Db.Repositories;
+
+public static class ReservationRepository
+{
+    
+    public static async Task<int> Create(Reservation reservation)
+    {
+        await using var context = new RestaurantReservationDbContext();
+        await context.Reservations.AddAsync(reservation);
+        await context.SaveChangesAsync();
+
+        return reservation.ReservationId;
+    }
+    
+    public static async Task<int?> Update(Reservation updatedReservation)
+    {
+        await using var context = new RestaurantReservationDbContext();
+        var existingReservation = await context.Reservations.FindAsync(updatedReservation.ReservationId);
+
+        if (existingReservation == null) return null;
+        existingReservation.ReservationDate = updatedReservation.ReservationDate;
+        existingReservation.PartySize = updatedReservation.PartySize;
+        
+        await context.SaveChangesAsync();
+        return updatedReservation.ReservationId;
+    }
+    
+    public static async Task<int?> Delete(int id)
+    {
+        await using var context = new RestaurantReservationDbContext();
+        var existingReservation = await context.Reservations.FindAsync(id);
+
+        if (existingReservation == null) return null;
+        context.Reservations.Remove(existingReservation);
+        
+        await context.SaveChangesAsync();
+        return id;
+    }
+}
