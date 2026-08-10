@@ -1,7 +1,8 @@
 ﻿using RestaurantReservation.Db.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace RestaurantReservation.Db;
-using Microsoft.EntityFrameworkCore;
+
 public class RestaurantReservationDbContext: DbContext
 {
   public RestaurantReservationDbContext() { }
