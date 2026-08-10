@@ -40,4 +40,13 @@ public static class EmployeeRepository
         await context.SaveChangesAsync();
         return id;
     }
+    
+    public static async Task<List<Employee>> ListManagers()
+    {
+        await using var context = new RestaurantReservationDbContext();
+        return await context.Employees
+            .Where(e => e.Position == "Manager")
+            .ToListAsync();
+    }
+
 }
