@@ -12,6 +12,8 @@ public static class Program
        Console.WriteLine("List of all Managers:");
        await EmployeeService.ListAllManagers();
        Console.WriteLine("------------------------------------");
-      
+       Console.WriteLine($"Get Reservations By CustomerId: {CustomerId}");
+       await ReservationService.GetReservationsByCustomerId(CustomerId);
+       Console.WriteLine("------------------------------------");
     }
 }
