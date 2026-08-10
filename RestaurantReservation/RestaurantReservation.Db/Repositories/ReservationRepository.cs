@@ -39,4 +39,12 @@ public static class ReservationRepository
         await context.SaveChangesAsync();
         return id;
     }
+    
+    public static async Task<Reservation> GetReservationsByCustomer(int CustomerId)
+    {
+        await using var context = new RestaurantReservationDbContext();
+        return await context.Reservations
+            .Where(r => r.CustomerId == CustomerId)
+            .ToListAsync();
+    }
 }
