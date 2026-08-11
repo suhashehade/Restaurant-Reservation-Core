@@ -48,5 +48,17 @@ public static class EmployeeRepository
             .Where(e => e.Position == "Manager")
             .ToListAsync();
     }
+    
+    public static async Task<decimal> CalculateAverageOrderAmount(int employeeId)
+    {
+        await using var context = new RestaurantReservationDbContext();
+
+      
+        var averageAmount = await context.Orders
+            .Where(o => o.EmployeeId == employeeId)
+            .AverageAsync(o => (decimal?)o.TotalAmount);
+        
+        return averageAmount ?? 0m; 
+    }
 
 }
