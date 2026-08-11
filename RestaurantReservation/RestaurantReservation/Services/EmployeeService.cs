@@ -14,4 +14,10 @@ public static class EmployeeService
         }
     }
     
+    public static async Task CalculateAverageOrderAmount(int employeeId, JsonSerializerOptions options)
+    {
+        var average = await EmployeeRepository.CalculateAverageOrderAmount(employeeId);
+        Console.WriteLine(average);
+    }
+    
 }

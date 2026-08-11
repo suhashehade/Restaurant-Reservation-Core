@@ -9,6 +9,7 @@ public static class Program
 {
     private static readonly int CustomerId = 1;
     private static readonly int ReservationId = 1;
+    private static readonly int EmployeeId = 1;
     public static async Task Main(string[] args)
     {  
         var options = new JsonSerializerOptions
@@ -31,6 +32,10 @@ public static class Program
        
        Console.WriteLine($"Find the menu items ordered in that specific reservation {ReservationId} along with the associated menu items.");
        await MenuItemService.ListOrderedAndMenuItems(ReservationId, options);
+       Console.WriteLine("------------------------------------");
+       
+       Console.WriteLine($"Calculates the average order amount for that specific employee {EmployeeId} along with the associated menu items.");
+       await EmployeeService.CalculateAverageOrderAmount(EmployeeId, options);
        Console.WriteLine("------------------------------------");
     }
 }
