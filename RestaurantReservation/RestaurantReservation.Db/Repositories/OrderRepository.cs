@@ -48,4 +48,21 @@ public static class OrderRepository
             .Where(o => o.ReservationId == reservationId)
             .ToListAsync();
     }
+    
+    public static async Task<List<Order>> ListOrderedAndMenuItems(int reservationId)
+    {
+        await using var context = new RestaurantReservationDbContext();
+        return  await context.Orders
+            .Where(o => o.ReservationId == reservationId)
+            .SelectMany(o => o.OrderItems, (o, oi) => new 
+            {
+                o.ReservationId,
+                MenuItemName = oi.MenuItem.Name,
+                oi.MenuItem.Price,
+                oi.MenuItem.Description,
+                SubTotal = oi.Quantity * oi.MenuItem.Price
+            })
+            .ToListAsync();
+
+    }
 }
