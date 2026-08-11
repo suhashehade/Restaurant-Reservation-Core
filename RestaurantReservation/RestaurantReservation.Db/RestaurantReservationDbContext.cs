@@ -20,6 +20,7 @@ public class RestaurantReservationDbContext: DbContext
     public DbSet<Restaurant> Restaurants { get; set; }
     public DbSet<Table> Tables { get; set; }
     public DbSet<ReservationDetails> ReservationDetails => Set<ReservationDetails>();
+    public DbSet<EmployeeDetails> EmployeeDetails => Set<EmployeeDetails>();
   
   
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -103,6 +104,10 @@ public class RestaurantReservationDbContext: DbContext
     modelBuilder.Entity<ReservationDetails>()
       .HasNoKey()
       .ToView("ReservationDetails");
+    
+    modelBuilder.Entity<EmployeeDetails>()
+      .HasNoKey()
+      .ToView("Employees_Details");
     
     modelBuilder.Seed();
   }
