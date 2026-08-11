@@ -40,4 +40,14 @@ public static class RestaurantRepository
         await context.SaveChangesAsync();
         return id;
     }
+    
+    public static async Task<decimal> CalculateRestaurantRevenue(int restaurantId)
+    {
+        await using var context = new RestaurantReservationDbContext();
+
+        return await context.Restaurants
+            .Where(r => r.RestaurantId == restaurantId)
+            .Select(r => context.CalculateRevenue(restaurantId))
+            .FirstAsync();
+    }
 }

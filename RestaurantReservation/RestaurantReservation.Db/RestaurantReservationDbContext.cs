@@ -109,6 +109,13 @@ public class RestaurantReservationDbContext: DbContext
       .HasNoKey()
       .ToView("Employees_Details");
     
+    modelBuilder
+      .HasDbFunction(() => CalculateRevenue(default))
+      .HasName("fn_CalculateRevenue");
+    
     modelBuilder.Seed();
   }
+  
+  public decimal CalculateRevenue(int restaurantId)
+    => throw new NotSupportedException();
 }
