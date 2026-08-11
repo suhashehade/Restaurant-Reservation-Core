@@ -48,7 +48,7 @@ public static class CustomerRepository
 
         return await context.CustomerReservationResults
             .FromSqlInterpolated(
-                $"EXEC FindCustomersByPartySize @PartySize = {partySize}"
+                $"EXEC sp_FindCustomersByPartySize @PartySize = {partySize}"
             )
             .ToListAsync();
     }
