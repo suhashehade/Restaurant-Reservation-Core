@@ -20,4 +20,13 @@ public static class EmployeeService
         Console.WriteLine(average);
     }
     
+    public static async Task ListEmployeesDetails(JsonSerializerOptions options)
+    {
+        var employeeDetailsList = await EmployeeDetailsRepository.View_EmployeeDetails();
+        foreach (var employee in employeeDetailsList)
+        {
+            Console.WriteLine(JsonSerializer.Serialize(employee, options));
+        }
+    }
+    
 }

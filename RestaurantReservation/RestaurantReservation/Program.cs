@@ -42,5 +42,9 @@ public static class Program
        await ReservationService.GetReservationDetails();
        Console.WriteLine("------------------------------------");
        
+       Console.WriteLine($"View that lists all employees with their respective restaurant details from a database view");
+       await EmployeeService.ListEmployeesDetails(options);
+       Console.WriteLine("------------------------------------");
+       
     }
 }
