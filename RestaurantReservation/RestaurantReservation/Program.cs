@@ -37,5 +37,10 @@ public static class Program
        Console.WriteLine($"Calculates the average order amount for that specific employee {EmployeeId} along with the associated menu items.");
        await EmployeeService.CalculateAverageOrderAmount(EmployeeId, options);
        Console.WriteLine("------------------------------------");
+       
+       Console.WriteLine($"View that lists all the reservations with their associated customer and restaurant information");
+       await ReservationService.GetReservationDetails();
+       Console.WriteLine("------------------------------------");
+       
     }
 }

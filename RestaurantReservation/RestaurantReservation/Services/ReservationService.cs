@@ -13,4 +13,17 @@ public static class ReservationService
             Console.WriteLine(JsonSerializer.Serialize(reservation, options));
         }
     }
+    
+    public static async Task GetReservationDetails()
+    {
+        var reservations = await ReservationDetailsRepository.View_ReservationDetails();
+        foreach (var reservation in reservations)
+        {
+            Console.WriteLine(
+                $"Reservation: {reservation.ReservationId}, " +
+                $"Customer: {reservation.CustomerName}, " +
+                $"Restaurant: {reservation.RestaurantName}"
+            );
+        }
+    }
 }
