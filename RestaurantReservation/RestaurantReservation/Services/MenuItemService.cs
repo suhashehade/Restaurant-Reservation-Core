@@ -1,16 +1,12 @@
-﻿using System.Text.Json;
+﻿using RestaurantReservation.Db.Models;
 using RestaurantReservation.Db.Repositories;
 
 namespace RestaurantReservation.Services;
 
 public static class MenuItemService
 {
-    public static async Task ListOrderedAndMenuItems(int reservationId, JsonSerializerOptions options)
+    public static async Task<List<MenuItem>> ListOrderedAndMenuItems(int reservationId)
     {
-        var menuItems = await MenuItemRepository.ListOrderedAndMenuItems(reservationId);
-        foreach (var menuItem in menuItems)
-        {
-            Console.WriteLine(JsonSerializer.Serialize(menuItem, options));
-        }
+        return await MenuItemRepository.ListOrderedAndMenuItems(reservationId);
     }
 }
