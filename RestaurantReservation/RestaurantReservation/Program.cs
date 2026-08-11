@@ -29,5 +29,8 @@ public static class Program
        await OrderService.ListOrdersAndMenuItems(ReservationId, options);
        Console.WriteLine("------------------------------------");
        
+       Console.WriteLine($"Find the menu items ordered in that specific reservation {ReservationId} along with the associated menu items.");
+       await MenuItemService.ListOrderedAndMenuItems(ReservationId, options);
+       Console.WriteLine("------------------------------------");
     }
 }
