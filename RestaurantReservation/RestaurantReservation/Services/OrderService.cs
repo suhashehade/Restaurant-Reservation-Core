@@ -14,4 +14,13 @@ public static class OrderService
             Console.WriteLine(JsonSerializer.Serialize(order, options));
         }
     }
+    
+    public static async Task ListOrderedAndMenuItems(int reservationId, JsonSerializerOptions options)
+    {
+        var orders = await OrderRepository.ListOrderedAndMenuItems(reservationId);
+        foreach (var order in orders)
+        {
+            Console.WriteLine(JsonSerializer.Serialize(order, options));
+        }
+    }
 }

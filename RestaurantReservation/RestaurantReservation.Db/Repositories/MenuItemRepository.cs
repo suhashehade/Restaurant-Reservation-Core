@@ -39,4 +39,15 @@ public static class MenuItemRepository
         await context.SaveChangesAsync();
         return id;
     }
+    
+    public static async Task<List<MenuItem>> ListOrderedAndMenuItems(int reservationId)
+    {
+        await using var context = new RestaurantReservationDbContext();
+        return await context.Orders
+            .Where(o => o.ReservationId == reservationId)
+            .SelectMany(o => o.OrderItems)
+            .Select(oi => oi.MenuItem!) 
+            .Distinct() 
+            .ToListAsync();
+    }
 }
