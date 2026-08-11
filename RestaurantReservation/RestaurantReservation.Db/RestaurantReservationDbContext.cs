@@ -19,6 +19,7 @@ public class RestaurantReservationDbContext: DbContext
     public DbSet<Reservation> Reservations { get; set; }
     public DbSet<Restaurant> Restaurants { get; set; }
     public DbSet<Table> Tables { get; set; }
+    public DbSet<ReservationDetails> ReservationDetails => Set<ReservationDetails>();
   
   
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -98,6 +99,10 @@ public class RestaurantReservationDbContext: DbContext
       .WithMany(r => r.Tables)
       .HasForeignKey(t => t.RestaurantId)
       .OnDelete(DeleteBehavior.Cascade);
+    
+    modelBuilder.Entity<ReservationDetails>()
+      .HasNoKey()
+      .ToView("ReservationDetails");
     
     modelBuilder.Seed();
   }
