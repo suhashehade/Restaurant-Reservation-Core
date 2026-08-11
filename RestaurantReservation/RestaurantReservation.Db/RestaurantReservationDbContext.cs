@@ -21,6 +21,9 @@ public class RestaurantReservationDbContext: DbContext
     public DbSet<Table> Tables { get; set; }
     public DbSet<ReservationDetails> ReservationDetails => Set<ReservationDetails>();
     public DbSet<EmployeeDetails> EmployeeDetails => Set<EmployeeDetails>();
+    
+    public DbSet<CustomerReservationResult> CustomerReservationResults =>
+      Set<CustomerReservationResult>();
   
   
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -112,6 +115,9 @@ public class RestaurantReservationDbContext: DbContext
     modelBuilder
       .HasDbFunction(() => CalculateRevenue(default))
       .HasName("fn_CalculateRevenue");
+    
+    modelBuilder.Entity<CustomerReservationResult>()
+      .HasNoKey();
     
     modelBuilder.Seed();
   }

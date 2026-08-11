@@ -40,4 +40,16 @@ public static class CustomerRepository
         await context.SaveChangesAsync();
         return id;
     }
+    
+    public static async Task<List<CustomerReservationResult>> FindCustomersByPartySize(
+        int partySize)
+    {
+        await using var context = new RestaurantReservationDbContext();
+
+        return await context.CustomerReservationResults
+            .FromSqlInterpolated(
+                $"EXEC FindCustomersByPartySize @PartySize = {partySize}"
+            )
+            .ToListAsync();
+    }
 }
