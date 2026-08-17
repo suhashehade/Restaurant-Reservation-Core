@@ -78,54 +78,101 @@ internal static class MainClass
         var reservationApi = api.MapGroup("/reservations");
         var employeeApi = api.MapGroup("/employees");
 
-        reservationApi.MapGet("/", async () => await ReservationRepository.GetAll()).RequireAuthorization();
+        reservationApi.MapGet("/", async () =>
+        {
+            
+            var reservations = await ReservationRepository.GetAll();
+            return Results.Ok(new {
+                data = reservations,
+                count = reservations.Count
+            });
+        }).RequireAuthorization();
 
         reservationApi.MapGet("/{id:int}", async (int id) =>
         {
             var reservation = await ReservationRepository.GetById(id);
-            return reservation == null ? Results.NotFound() : Results.Ok(reservation);
+            return reservation == null ? Results.NotFound() : Results.Ok(new {
+                data = reservation
+            });
         }).RequireAuthorization();
 
         reservationApi.MapPost("/", async (Reservation reservation) =>
         {
-            var res = await ReservationRepository.Create(reservation);
-            return Results.Ok(res);
+            var reservationId = await ReservationRepository.Create(reservation);
+            return Results.Created($"/api/reservations/{reservationId}", new
+            {
+                id = reservationId
+            });
         }).RequireAuthorization();
 
         reservationApi.MapPut("/{id:int}", async (int id, Reservation reservation) =>
         {
             var res = await ReservationRepository.Update(id, reservation);
-            return Results.Ok(res);
+            if (res == null)
+            {
+                return Results.NotFound();
+            }
+            return Results.Ok(new
+            {
+                id
+            });
+        }).RequireAuthorization();
+        
+        reservationApi.MapDelete("/{id:int}", async (int id) =>
+        {
+           var reservationId = await ReservationRepository.Delete(id);
+            if (reservationId == null)
+            {
+                return Results.NotFound();
+            }
+            return Results.Ok(new
+            {
+                id = (int)reservationId
+            });
         }).RequireAuthorization();
 
         reservationApi.MapGet("/customer/{customerId:int}", async (int customerId) =>
         {
-            var res = await ReservationRepository.GetReservationsByCustomer(customerId);
-            return Results.Ok(res);
+            var reservationId = await ReservationRepository.GetReservationsByCustomer(customerId);
+            return Results.Ok(new
+            {
+                id = reservationId
+            });
         }).RequireAuthorization();
 
         reservationApi.MapGet("/{reservationId:int}/orders", async (int reservationId) =>
         {
-            var res = await ReservationRepository.ListOrdersAndMenuItems(reservationId);
-            return Results.Ok(res);
+            var ordersAndMenuItems = await ReservationRepository.ListOrdersAndMenuItems(reservationId);
+            return Results.Ok(new {
+               data = ordersAndMenuItems,
+               count = ordersAndMenuItems.Count
+            });
         }).RequireAuthorization();
 
         reservationApi.MapGet("/{reservationId:int}/menu-items", async (int reservationId) =>
         {
-            var res = await ReservationRepository.ListOrderedAndMenuItems(reservationId);
-            return Results.Ok(res);
+            var menuItems = await ReservationRepository.ListOrderedAndMenuItems(reservationId);
+            return Results.Ok(new {
+                data = menuItems,
+                count = menuItems.Count
+            });
         }).RequireAuthorization();
 
         employeeApi.MapGet("/managers", async () =>
         {
             var managers = await EmployeeRepository.ListManagers();
-            return Results.Ok(managers);
+            return Results.Ok(new {
+                data = managers,
+                count = managers.Count
+            });
         }).RequireAuthorization();
 
         employeeApi.MapGet("/{employeeId:int}/average-order-amount", async (int employeeId) =>
         {
             var res = await EmployeeRepository.CalculateAverageOrderAmount(employeeId);
-            return Results.Ok(res);
+            return Results.Ok(new {
+                average = res
+            });
         }).RequireAuthorization();
         
         app.MapPost("/login", (LoginRequest request, JwtTokenGenerator tokenGenerator) =>
@@ -145,7 +192,7 @@ internal static class MainClass
                 });
             }
             
-            if (request.Username != "suha" || request.Password != "123456")
+            if (!request.Username.Equals("suha", StringComparison.CurrentCultureIgnoreCase) || !request.Password.Equals("123456", StringComparison.CurrentCultureIgnoreCase))
             {
                 return Results.Unauthorized();
             }
