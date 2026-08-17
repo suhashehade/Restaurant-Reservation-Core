@@ -132,12 +132,17 @@ internal static class MainClass
         {
             if (request.Username == "" || request.Password == "")
             {
-                return Results.BadRequest(error: "username and password shouldn't be empty");
+                return Results.BadRequest(new {
+                    error = "username and password shouldn't be empty"
+                });
             }
             
             if (request.Password.Length < 6)
             {
-                return Results.BadRequest(error: "Password should be at least 6 characters");
+                return Results.BadRequest(new
+                {
+                    error = "Password should be at least 6 characters"
+                });
             }
             
             if (request.Username != "suha" || request.Password != "123456")
