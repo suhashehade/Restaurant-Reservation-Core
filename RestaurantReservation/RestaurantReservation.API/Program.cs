@@ -110,7 +110,7 @@ internal static class MainClass
             return Results.Ok(res);
         }).RequireAuthorization();
 
-        reservationApi.MapGet("/{reservationId:int}/menuItems", async (int reservationId) =>
+        reservationApi.MapGet("/{reservationId:int}/menu-items", async (int reservationId) =>
         {
             var res = await ReservationRepository.ListOrderedAndMenuItems(reservationId);
             return Results.Ok(res);
@@ -122,7 +122,7 @@ internal static class MainClass
             return Results.Ok(managers);
         }).RequireAuthorization();
 
-        employeeApi.MapGet("/{employeeId:int}", async (int employeeId) =>
+        employeeApi.MapGet("/{employeeId:int}/average-order-amount", async (int employeeId) =>
         {
             var res = await EmployeeRepository.CalculateAverageOrderAmount(employeeId);
             return Results.Ok(res);
