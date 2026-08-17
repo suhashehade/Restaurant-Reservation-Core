@@ -2,6 +2,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using RestaurantReservation.API.Auth;
 using RestaurantReservation.Db.Models;
 using RestaurantReservation.Db.Repositories;
@@ -15,7 +16,23 @@ internal static class MainClass
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddOpenApi();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(options =>
+        {
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Description = "Enter your JWT token."
+            });
+
+            options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+            {
+                [new OpenApiSecuritySchemeReference("Bearer", document)] = []
+            });
+        });
         
         builder.Services.AddScoped<JwtTokenGenerator>();
         builder.Services.Configure<JwtConfig>(
@@ -61,55 +78,55 @@ internal static class MainClass
         var reservationApi = api.MapGroup("/reservations");
         var employeeApi = api.MapGroup("/employees");
 
-        reservationApi.MapGet("/", async () => await ReservationRepository.GetAll());
+        reservationApi.MapGet("/", async () => await ReservationRepository.GetAll()).RequireAuthorization();
 
         reservationApi.MapGet("/{id:int}", async (int id) =>
         {
             var reservation = await ReservationRepository.GetById(id);
             return reservation == null ? Results.NotFound() : Results.Ok(reservation);
-        });
+        }).RequireAuthorization();
 
         reservationApi.MapPost("/", async (Reservation reservation) =>
         {
             var res = await ReservationRepository.Create(reservation);
             return Results.Ok(res);
-        });
+        }).RequireAuthorization();
 
         reservationApi.MapPut("/{id:int}", async (int id, Reservation reservation) =>
         {
             var res = await ReservationRepository.Update(id, reservation);
             return Results.Ok(res);
-        });
+        }).RequireAuthorization();
 
         reservationApi.MapGet("/customer/{customerId:int}", async (int customerId) =>
         {
             var res = await ReservationRepository.GetReservationsByCustomer(customerId);
             return Results.Ok(res);
-        });
+        }).RequireAuthorization();
 
         reservationApi.MapGet("/{reservationId:int}/orders", async (int reservationId) =>
         {
             var res = await ReservationRepository.ListOrdersAndMenuItems(reservationId);
             return Results.Ok(res);
-        });
+        }).RequireAuthorization();
 
         reservationApi.MapGet("/{reservationId:int}/menuItems", async (int reservationId) =>
         {
             var res = await ReservationRepository.ListOrderedAndMenuItems(reservationId);
             return Results.Ok(res);
-        });
+        }).RequireAuthorization();
 
         employeeApi.MapGet("/managers", async () =>
         {
             var managers = await EmployeeRepository.ListManagers();
             return Results.Ok(managers);
-        });
+        }).RequireAuthorization();
 
         employeeApi.MapGet("/{employeeId:int}", async (int employeeId) =>
         {
             var res = await EmployeeRepository.CalculateAverageOrderAmount(employeeId);
             return Results.Ok(res);
-        });
+        }).RequireAuthorization();
         
         app.MapPost("/login", (LoginRequest request, JwtTokenGenerator tokenGenerator) =>
         {
@@ -138,16 +155,6 @@ internal static class MainClass
                 token
             });
         });
-        
-        app.MapGet("/welcome", () => "Welcome! You are authorized.").RequireAuthorization();
-
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
-            app.MapOpenApi();
-        }
-
-        app.UseHttpsRedirection();
 
         app.Run();
     }
