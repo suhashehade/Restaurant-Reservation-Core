@@ -39,3 +39,136 @@ Before we dive into the task at hand, let's first explore the Database Schema. B
     1. Design a stored procedure for **`Finding all customers who have made reservations with a party size greater than a certain value`** using Entity Framework Core migrations.
     2. Develop a method in your RestaurantReservation.Db project to execute the stored procedure.
 14. Create a repository class for each entity and call it: **`{EntityName}Repository.cs`**, and move related methods from the previous requirements to the right repository. These repositories should exist in **`Repositories`** folder **`RestaurantReservation.Db`**
+15. Restaurant Reservation Minimal RESTful API
+
+A new **ASP.NET Core Web API** project named **`RestaurantReservation.API`** was created to expose the existing `RestaurantReservation.Db` functionality through Minimal APIs.
+
+### Project Structure
+
+The solution contains the following projects:
+
+```text
+RestaurantReservation
+├── RestaurantReservation
+├── RestaurantReservation.Db
+└── RestaurantReservation.API
+```
+
+The `RestaurantReservation.API` project references `RestaurantReservation.Db` to access the existing models, `DbContext`, and repository methods.
+
+### Reservation CRUD Endpoints
+
+The Reservation API was implemented using **ASP.NET Core Minimal APIs**.
+
+| Method | Endpoint                 | Description                    |
+| ------ | ------------------------ | ------------------------------ |
+| GET    | `/api/reservations`      | Retrieve all reservations      |
+| GET    | `/api/reservations/{id}` | Retrieve a reservation by ID   |
+| POST   | `/api/reservations`      | Create a new reservation       |
+| PUT    | `/api/reservations/{id}` | Update an existing reservation |
+| DELETE | `/api/reservations/{id}` | Delete a reservation           |
+
+Route constraints are used where appropriate, for example:
+
+```text
+/api/reservations/{id:int}
+```
+
+### Additional Reservation Endpoints
+
+The API also exposes the required reservation-related operations:
+
+| Method | Endpoint                                       | Description                                                       |
+| ------ | ---------------------------------------------- | ----------------------------------------------------------------- |
+| GET    | `/api/reservations/customer/{customerId}`      | Retrieve reservations belonging to a specific customer            |
+| GET    | `/api/reservations/{reservationId}/orders`     | Retrieve orders and their associated menu items for a reservation |
+| GET    | `/api/reservations/{reservationId}/menu-items` | Retrieve the menu items ordered for a reservation                 |
+
+For the orders and menu items response, EF Core projection is used to return only the required data instead of serializing the complete entity graph and its navigation properties.
+
+### Employee Endpoints
+
+The following employee-related Minimal APIs were implemented:
+
+| Method | Endpoint                                           | Description                                        |
+| ------ | -------------------------------------------------- | -------------------------------------------------- |
+| GET    | `/api/employees/managers`                          | Retrieve all employees whose position is Manager   |
+| GET    | `/api/employees/{employeeId}/average-order-amount` | Calculate the average order amount for an employee |
+
+### JWT Authentication and Authorization
+
+JWT-based authentication was implemented to secure the API.
+
+The authentication configuration includes:
+
+* JWT Bearer authentication.
+* Token signature validation.
+* Issuer validation.
+* Audience validation.
+* Token lifetime validation.
+* Zero clock skew.
+* Authorization middleware.
+
+A login endpoint was also added for testing:
+
+```text
+POST /login
+```
+
+The endpoint generates a JWT token for valid credentials.
+
+The generated token can then be supplied in the `Authorization` header:
+
+```text
+Authorization: Bearer <token>
+```
+
+Protected endpoints require a valid JWT token.
+
+### Swagger / OpenAPI
+
+Swagger was integrated using **Swashbuckle.AspNetCore** to provide interactive API documentation.
+
+Swagger documents the available endpoints, parameters, request and response information, and HTTP status codes.
+
+The Swagger UI is available at:
+
+```text
+/swagger
+```
+
+JWT Bearer authentication was also configured in Swagger, allowing the generated JWT token to be entered using the **Authorize** button and automatically included in authorized API requests.
+
+### HTTP Status Codes
+
+The API uses appropriate HTTP status codes, including:
+
+* `200 OK` — Successful request.
+* `201 Created` — Resource successfully created.
+* `400 Bad Request` — Invalid request or validation failure.
+* `401 Unauthorized` — Authentication is required or the supplied JWT is invalid.
+* `404 Not Found` — Requested resource does not exist.
+* `500 Internal Server Error` — Unexpected server-side error.
+
+### Asynchronous Operations
+
+Repository and API operations use asynchronous methods wherever database access is involved.
+
+Examples include:
+
+```csharp
+await Repository.GetAll();
+await Repository.GetById(id);
+await Repository.Create(entity);
+```
+
+EF Core asynchronous LINQ methods such as `ToListAsync()`, `FirstOrDefaultAsync()`, and `SaveChangesAsync()` are used for database operations.
+
+### API Testing
+
+The implemented endpoints can be tested manually using:
+
+* Swagger UI
+* Postman
+
+The authentication flow can be tested by obtaining a JWT from the `/login` endpoint and using the token to access protected endpoints.
