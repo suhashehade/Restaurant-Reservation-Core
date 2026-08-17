@@ -17,17 +17,17 @@ public static class ReservationRepository
         return reservation.ReservationId;
     }
     
-    public static async Task<int?> Update(Reservation updatedReservation)
+    public static async Task<Reservation?> Update(int reservationId, Reservation updatedReservation)
     {
         await using var context = new RestaurantReservationDbContext();
-        var existingReservation = await context.Reservations.FindAsync(updatedReservation.ReservationId);
+        var existingReservation = await context.Reservations.FindAsync(reservationId);
 
         if (existingReservation == null) return null;
         existingReservation.ReservationDate = updatedReservation.ReservationDate;
         existingReservation.PartySize = updatedReservation.PartySize;
         
         await context.SaveChangesAsync();
-        return updatedReservation.ReservationId;
+        return updatedReservation;
     }
     
     public static async Task<int?> Delete(int id)
@@ -49,5 +49,20 @@ public static class ReservationRepository
         return await context.Reservations
             .Where(r => r.CustomerId == customerId)
             .ToListAsync();
+    }
+    
+    public static async Task<List<Reservation>> GetAll()
+    {
+        await using var context = new RestaurantReservationDbContext();
+
+        return await context.Reservations.ToListAsync();
+    }
+    
+    public static async Task<Reservation?> GetById(int reservationId)
+    {
+        await using var context = new RestaurantReservationDbContext();
+
+        return await context.Reservations
+            .Where(r => r.ReservationId == reservationId).FirstOrDefaultAsync();
     }
 }
