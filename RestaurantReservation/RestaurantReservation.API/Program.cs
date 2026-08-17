@@ -15,7 +15,7 @@ internal static class MainClass
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddOpenApi();
-
+        builder.Services.AddSwaggerGen();
         
         builder.Services.AddScoped<JwtTokenGenerator>();
         builder.Services.Configure<JwtConfig>(
@@ -49,6 +49,9 @@ internal static class MainClass
             });
         builder.Services.AddAuthorization();
         var app = builder.Build();
+        
+        app.UseSwagger();
+        app.UseSwaggerUI();
         
         app.UseAuthentication();
         app.UseAuthorization();
