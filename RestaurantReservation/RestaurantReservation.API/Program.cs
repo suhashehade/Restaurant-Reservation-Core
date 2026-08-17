@@ -10,6 +10,7 @@ var app = builder.Build();
 app.MapGet("/", () => "Hello World!");
 var api = app.MapGroup("/api");
 var reservationApi = api.MapGroup("/reservations");
+var employeeApi = api.MapGroup("/employees");
 
 reservationApi.MapGet("/", async () => await ReservationRepository.GetAll());
 
@@ -28,6 +29,36 @@ reservationApi.MapPost("/", async (Reservation reservation) =>
 reservationApi.MapPut("/{id:int}", async (int id, Reservation reservation) =>
 {
     var res = await ReservationRepository.Update(id, reservation);
+    return Results.Ok(res);
+});
+
+reservationApi.MapGet("/customer/{customerId:int}", async (int customerId) =>
+{
+    var res = await ReservationRepository.GetReservationsByCustomer(customerId);
+    return Results.Ok(res);
+});
+
+reservationApi.MapGet("/{reservationId:int}/orders", async (int reservationId) =>
+{
+    var res = await ReservationRepository.ListOrdersAndMenuItems(reservationId);
+    return Results.Ok(res);
+});
+
+reservationApi.MapGet("/{reservationId:int}/menuItems", async (int reservationId) =>
+{
+    var res = await ReservationRepository.ListOrderedAndMenuItems(reservationId);
+    return Results.Ok(res);
+});
+
+employeeApi.MapGet("/managers", async () =>
+{
+    var managers = await EmployeeRepository.ListManagers();
+    return Results.Ok(managers);
+});
+
+employeeApi.MapGet("/{employeeId:int}", async (int employeeId) =>
+{
+    var res = await EmployeeRepository.CalculateAverageOrderAmount(employeeId);
     return Results.Ok(res);
 });
 

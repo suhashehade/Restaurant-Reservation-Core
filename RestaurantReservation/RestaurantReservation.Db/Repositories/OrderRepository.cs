@@ -39,14 +39,6 @@ public static class OrderRepository
         return id;
     }
     
-    public static async Task<List<Order>> ListOrdersAndMenuItems(int reservationId)
-    {
-        await using var context = new RestaurantReservationDbContext();
-        return await context.Orders
-            .Include(o => o.OrderItems)
-            .ThenInclude(oi => oi.MenuItem)
-            .Where(o => o.ReservationId == reservationId)
-            .ToListAsync();
-    }
+  
     
 }

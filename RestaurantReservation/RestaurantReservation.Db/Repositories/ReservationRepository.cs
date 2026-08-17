@@ -42,6 +42,43 @@ public static class ReservationRepository
         return id;
     }
     
+    public static async Task<List<OrderWithMenuItemsDto>> ListOrdersAndMenuItems(int reservationId)
+    {
+        await using var context = new RestaurantReservationDbContext();
+
+        return await context.Orders
+            .Where(o => o.ReservationId == reservationId)
+            .Select(o => new OrderWithMenuItemsDto
+            {
+                OrderId = o.OrderId,
+                OrderDate = o.OrderDate,
+                TotalAmount = o.TotalAmount,
+
+                MenuItems = o.OrderItems
+                    .Where(oi => oi.MenuItem != null)
+                    .Select(oi => new OrderMenuItemDto
+                    {
+                        ItemId = oi.MenuItem!.ItemId,
+                        Name = oi.MenuItem.Name,
+                        Price = oi.MenuItem.Price,
+                        Quantity = oi.Quantity
+                    })
+                    .ToList()
+            })
+            .ToListAsync();
+    }
+    
+    public static async Task<List<MenuItem>> ListOrderedAndMenuItems(int reservationId)
+    {
+        await using var context = new RestaurantReservationDbContext();
+        return await context.Orders
+            .Where(o => o.ReservationId == reservationId)
+            .SelectMany(o => o.OrderItems)
+            .Select(oi => oi.MenuItem!) 
+            .Distinct() 
+            .ToListAsync();
+    }
+    
     public static async Task<List<Reservation>> GetReservationsByCustomer(int customerId)
     {
         await using var context = new RestaurantReservationDbContext();

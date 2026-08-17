@@ -24,9 +24,9 @@ public static class Program
        
        await ReservationHandler.GetReservationsByCustomerId(CustomerId, options);
        
-       await OrderHandler.ListOrdersAndMenuItems(ReservationId, options);
+       await ReservationHandler.ListOrdersAndMenuItems(ReservationId, options);
        
-       await MenuItemHandler.ListOrderedAndMenuItems(ReservationId, options);
+       await ReservationHandler.ListOrderedAndMenuItems(ReservationId, options);
        
        await EmployeeHandler.CalculateAverageOrderAmount(EmployeeId, options);
        

@@ -16,6 +16,28 @@ public static class ReservationHandler
         Console.WriteLine("------------------------------------");
     }
     
+    public static async Task ListOrdersAndMenuItems(int reservationId, JsonSerializerOptions options)
+    {
+        Console.WriteLine($"Lists the orders placed on that specific reservation {reservationId} along with the associated menu items.");
+        var orders = await ReservationService.ListOrdersAndMenuItems(reservationId);
+        foreach (var order in orders)
+        {
+            Console.WriteLine(JsonSerializer.Serialize(order, options));
+        }
+        Console.WriteLine("------------------------------------");
+    }
+    
+    public static async Task ListOrderedAndMenuItems(int reservationId, JsonSerializerOptions options)
+    {
+        Console.WriteLine($"Find the menu items ordered in that specific reservation {reservationId} along with the associated menu items.");
+        var menuItems = await ReservationService.ListOrderedAndMenuItems(reservationId);
+        foreach (var menuItem in menuItems)
+        {
+            Console.WriteLine(JsonSerializer.Serialize(menuItem, options));
+        }
+        Console.WriteLine("------------------------------------");
+    }
+    
     public static async Task GetReservationDetails()
     {
         Console.WriteLine($"View that lists all the reservations with their associated customer and restaurant information");
