@@ -75,8 +75,8 @@ internal static class MainClass
 
         app.MapGet("/", () => "Hello World!");
         var api = app.MapGroup("/api");
-        var reservationApi = api.MapGroup("/reservations");
-        var employeeApi = api.MapGroup("/employees");
+        var reservationApi = api.MapGroup("/reservations").WithTags("Reservations");
+        var employeeApi = api.MapGroup("/employees").WithTags("Employees");
 
         reservationApi.MapGet("/", async () =>
         {
@@ -206,7 +206,7 @@ internal static class MainClass
             {
                 token
             });
-        });
+        }).WithTags("Authentication");
 
         app.Run();
     }
